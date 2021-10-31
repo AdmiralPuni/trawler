@@ -1,0 +1,151 @@
+{
+    "models": {
+        "hololive-en": {
+            "names": [
+                "ame",
+                "gura",
+                "ina",
+                "kiara",
+                "mori"
+            ],
+            "filename": "model-hololive-en.hdf5"
+        },
+        "hololive": {
+            "names": [
+                "akai-haato",
+                "amane-kanata",
+                "gawr-gura",
+                "himemori-luna",
+                "hoshimachi-suisei",
+                "houshou-marine",
+                "inugami-korone",
+                "kiryu-coco",
+                "minato-aqua",
+                "momosuzu-nene",
+                "mori-calliope",
+                "murasaki-shion",
+                "nakiri-ayame",
+                "natsuiro-matsuri",
+                "nekomata-okayu",
+                "ninomae_inanis",
+                "ookami-mio",
+                "oozora-subaru",
+                "ouro-kroni",
+                "sakura-miko",
+                "shirakami-fubuki",
+                "shiranui-flare",
+                "shirogane-noel",
+                "shishiro-botan",
+                "takanashi-kiara",
+                "tokino-sora",
+                "tokoyami-towa",
+                "tsunomaki-watame",
+                "uruha-rushia",
+                "usada-pekora",
+                "watson-amelia",
+                "yukihana-lamy"
+            ],
+            "filename": "model-hololive-flip.hdf5"
+        },
+        "hololivev2": {
+            "names": [
+                "Akai haato",
+                "Aki rosenthal",
+                "Amane kanata",
+                "Gawr gura",
+                "Himemori luna",
+                "Hoshimachi suisei",
+                "Houshou marine",
+                "Inugami korone",
+                "Kiryu coco",
+                "Minato aqua",
+                "Momosuzu nene",
+                "Mori calliope",
+                "Murasaki shion",
+                "Nakiri ayame",
+                "Natsuiro matsuri",
+                "Nekomata okayu",
+                "Ninomae ina'nis",
+                "Ookami mio",
+                "Oozora subaru",
+                "Sakura miko",
+                "Shirakami fubuki",
+                "Shiranui flare",
+                "Shirogane noel",
+                "Takanashi kiara",
+                "Tokino sora",
+                "Tokoyami towa",
+                "Tsunomaki watame",
+                "Uruha rushia",
+                "Usada pekora",
+                "Watson amelia",
+                "Yozora mel",
+                "Yukihana lamy",
+                "Yuzuki choco"
+            ],
+            "filename": "model-hololive-v2.hdf5"
+        },
+        "myusu": {
+            "names": [
+                "eli",
+                "hanayo",
+                "honoka",
+                "kotori",
+                "maki",
+                "nico",
+                "nozomi",
+                "rin",
+                "umi"
+            ],
+            "filename": "model-myusu-v2.hdf5"
+        },
+        "nijigasaki": {
+            "names": [
+                "Asaka karin",
+                "Emma verde",
+                "Konoe kanata",
+                "Miyashita ai",
+                "Nakasu kasumi",
+                "Ousaka shizuku",
+                "Takasaki yuu",
+                "Tennouji rina",
+                "Uehara ayumu",
+                "Yuuki setsuna"
+            ],
+            "filename": "model-nijigasaki.hdf5"
+        },
+        "love-live": {
+            "names": [
+                "Asaka karin",
+                "Ayase eli",
+                "Emma verde",
+                "Hoshizora rin",
+                "Koizumi hanayo",
+                "Konoe kanata",
+                "Kousaka honoka",
+                "Kunikida hanamaru",
+                "Kurosawa dia",
+                "Kurosawa ruby",
+                "Matsuura kanan",
+                "Minami kotori",
+                "Miyashita ai",
+                "Nakasu kasumi",
+                "Nishikino maki",
+                "Ohara mari",
+                "Ousaka shizuku",
+                "Sakurauchi riko",
+                "Sonoda umi",
+                "Takami chika",
+                "Takasaki yuu",
+                "Tennouji rina",
+                "Toujou nozomi",
+                "Tsushima yoshiko",
+                "Uehara ayumu",
+                "Watanabe you",
+                "Yazawa nico",
+                "Yuuki setsuna"
+            ],
+            "filename": "model-love-live.hdf5"
+        }
+    }
+}

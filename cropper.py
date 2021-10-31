@@ -55,8 +55,8 @@ image_paths_list = []
 
 path_count = 0
 
-input_folder = 'output/4cdn/'
-output_folder = 'output/cropper/love-live/'
+input_folder = 'output/video/'
+output_folder = 'output/cropper/video-4/'
 
 class image_paths:
   def __init__(self, input, output):
@@ -64,20 +64,20 @@ class image_paths:
     self.output = output
 
 #Dumb method find better one
-for dir in os.listdir(input_folder):
-  if not os.path.exists(os.path.join(output_folder, dir)):
-    os.makedirs(os.path.join(output_folder, dir))
+if not os.path.exists(output_folder):
+  os.makedirs(output_folder)
+
+for file in os.listdir(input_folder):
   if path_count == 4:
     path_count = 0
-  for file in os.listdir(os.path.join(input_folder, dir)):
-    if path_count == 0:
-      path_thread_0.append(image_paths(os.path.join(input_folder, dir, file), os.path.join(output_folder, dir, file)))
-    elif path_count == 1:
-      path_thread_1.append(image_paths(os.path.join(input_folder, dir, file), os.path.join(output_folder, dir, file)))
-    elif path_count == 2:
-      path_thread_2.append(image_paths(os.path.join(input_folder, dir, file), os.path.join(output_folder, dir, file)))
-    elif path_count == 3:
-      path_thread_3.append(image_paths(os.path.join(input_folder, dir, file), os.path.join(output_folder, dir, file)))
+  if path_count == 0:
+    path_thread_0.append(image_paths(input_folder + file, output_folder + file))
+  elif path_count == 1:
+    path_thread_1.append(image_paths(input_folder + file, output_folder + file))
+  elif path_count == 2:
+    path_thread_2.append(image_paths(input_folder + file, output_folder + file))
+  elif path_count == 3:
+    path_thread_3.append(image_paths(input_folder + file, output_folder + file))
   path_count +=1
 
 class myThread (threading.Thread):
