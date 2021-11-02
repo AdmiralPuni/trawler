@@ -49,7 +49,7 @@ class name_thread(threading.Thread):
     return True
 
 def main():
-  character_list = ['kunikida-hanamaru','kurosawa-dia','kurosawa-ruby','matsuura-kanan','ohara-mari','sakurauchi-riko','takami-chika','tsushima-yoshiko','watanabe-you']
+  character_list = ['kunikida-hanamaru','kurosawa-dia','kurosawa-ruby']
   thread_list = []
   site = 'https://gelbooru.com/index.php?page=post&s=list&tags=sort%3ascore%3adesc+rating%3asafe+solo+'
   for index, name in enumerate(character_list):
