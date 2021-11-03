@@ -114,6 +114,15 @@
             ],
             "filename": "model-nijigasaki.hdf5"
         },
+        "comic-girls": {
+            "names": [
+                "Irokawa Ruki",
+                "Katsuki Tsubasa",
+                "Kozuka Koyume",
+                "Moeta Kaoruko"
+            ],
+            "filename": "comic-girls.hdf5"
+        },
         "love-live": {
             "names": [
                 "Asaka karin",

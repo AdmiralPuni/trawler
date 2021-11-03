@@ -3,4 +3,5 @@ output/cropper/*
 output/flip/*
 output/taio/*
 output/video/*
+output/modelBuilder/*
 btb/*

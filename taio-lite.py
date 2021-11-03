@@ -15,17 +15,11 @@ from tkinter.constants import BOTH, BOTTOM, LEFT, N, NO, TOP, W, X, YES
 
 import numpy as np
 import tensorflow.keras as keras
-import tensorflow as tf
-import tensorflow_hub as hub
 from keras.preprocessing import image
 from tqdm import tqdm
-import matplotlib.pyplot as plt
 import numpy as np
 from PIL import ImageTk
 from PIL import Image
-from PIL import ImageColor
-from PIL import ImageDraw
-from PIL import ImageFont
 from shutil import move
 
 
@@ -51,32 +45,18 @@ def load_model(character_count, model_filename):
 
   return model
 
-def main(argv):
-  settings_json = json.load(open('settings.json', 'r'))
-  input_directory = ''
-  output_directory = ''
-  selected_model = ''
-  supervision = True
-  prediction_list = []
+def print_help():
+  print('Example     : taio.py -i input -o output -m myusu -s')
+  print('Arguments   :')
+  print('-i | Input folder, place your unsorted image here')
+  print('-o | Output folder, sorted images will be moved here')
+  print('-m | Model for character face detection')
+  print('-l | List the models available')
+  print('-s | Supervised decision, you will decide for each image')
+  print('-a | Images will be automaticcaly moved to their folder WARNING: Not very accurate')
+  print('-h | Show this help menu')
 
-  #Class to save prediction result
-  class prediction:
-    def __init__(self, path, names, image):
-      self.path = path
-      self.names = names
-      self.image = image
-
-  def print_help():
-    print('Example     : taio.py -i input -o output -m myusu -s')
-    print('Arguments   :')
-    print('-i | Input folder, place your unsorted image here')
-    print('-o | Output folder, sorted images will be moved here')
-    print('-m | Model for character face detection')
-    print('-l | List the models available')
-    print('-s | Supervised decision, you will decide for each image')
-    print('-a | Images will be automaticcaly moved to their folder WARNING: Not very accurate')
-    print('-h | Show this help menu')
-
+def extract_arguments(argv):
   #Get launch argument
   #Todo: load large imports after argument check instead of before
   try:
@@ -91,10 +71,6 @@ def main(argv):
     if opt == '-h':
       print_help()
       sys.exit()
-    elif opt in ("-l"):
-      for model_name in settings_json['models']:
-          print(model_name)
-      sys.exit()
     elif opt in ("-i"):
       input_directory = arg
     elif opt in ("-o"):
@@ -106,6 +82,41 @@ def main(argv):
     elif opt in ("-a"):
       supervision = False
   
+  return input_directory, output_directory, selected_model, supervision
+  
+def move_file(path, detected_names, single, output_directory, selected_model):
+  sorted_folder = output_directory + "/" + selected_model + '/'
+  if single:
+    if not os.path.exists(sorted_folder + detected_names[0]):
+      os.makedirs(sorted_folder + detected_names[0])
+    move(path, sorted_folder + detected_names[0] + "/" + os.path.basename(path))
+  else:
+    #WARNING: If the character name has - it will be hard to read the folder
+    if not os.path.exists(sorted_folder + '-'.join(detected_names)):
+      os.makedirs(sorted_folder + '-'.join(detected_names))
+    move(path, sorted_folder + '-'.join(detected_names) + "/" + os.path.basename(path))
+
+def clear_memory():
+  #Attempting to free up RAM, hub ram in still in shackles
+  #Todo: Doesn't work on linux
+  print('Clearing model...')
+  print('Clearing keras session...')
+  keras.backend.clear_session()
+  print('Collecting garbage...')
+  gc.collect()
+
+def main(argv):
+  settings_json = json.load(open('settings.json', 'r'))
+  input_directory, output_directory, selected_model, supervision = extract_arguments(argv)
+  prediction_list = []
+
+  #Class to save prediction result
+  class prediction:
+    def __init__(self, path, names, image):
+      self.path = path
+      self.names = names
+      self.image = image
+
   print('Input Directory     :', input_directory)
   print('Output Directory    :', output_directory)
   print('Model               :', selected_model)
@@ -149,60 +160,17 @@ def main(argv):
     else:
         continue
 
-  #Attempting to free up RAM, hub ram in still in shackles
-  #Todo: Doesn't work on linux
-  print('Clearing model...')
-  del model
-  print('Clearing keras session...')
-  keras.backend.clear_session()
-  print('Collecting garbage...')
-  gc.collect()
+  clear_memory()
 
   end_time = time.time()
   print('Time elapsed        : ', round(end_time-start_time,2), 's')
 
-  #Move the file to single character folder or group of characters
-  #Todo: make it less dumb
-  def move_file(path, detected_names, single, sorted_folder = output_directory + "/" + selected_model + '/'):
-    if single:
-      if not os.path.exists(sorted_folder + detected_names[0]):
-        os.makedirs(sorted_folder + detected_names[0])
-      move(path, sorted_folder + detected_names[0] + "/" + os.path.basename(path))
-    else:
-      #WARNING: If the character name has - it will be hard to read the folder
-      if not os.path.exists(sorted_folder + '-'.join(detected_names)):
-        os.makedirs(sorted_folder + '-'.join(detected_names))
-      move(path, sorted_folder + '-'.join(detected_names) + "/" + os.path.basename(path))
-
-  #Terminal input for decision of the prediction
-  def user_decision(path, detected_names):
-    if supervision:
-      print("Detected            :", detected_names)
-      plt.title(' '.join(detected_names), fontsize=24)
-      choice = int(input("Decision            : "))
-      if choice == 1:
-        move_file(path, detected_names, True)
-      elif choice == 2:
-        move_file(path, detected_names, False)
-      else:
-        return
-    else:
-      if len(detected_names) == 1:
-        move_file(path, detected_names, True)
-      elif len(detected_names) > 1:
-        move_file(path, detected_names, False)
-
-  #Terminal with image using matplotlib(incredibly slow)
-  #I might abandon this completely for the GUI since decision making progress needs to be fast
   def auto():
-    #Iterates through the prediction list
     print('Moving files...')
     for list in tqdm(prediction_list):
       if len(list.names) != 0:
-        move_file(list.path, list.names, True)
-
+        move_file(list.path, list.names, True, output_directory, selected_model)
   
-  #Tkinter gui stuff, miles faster than matplotlib. It works
   def gui():
     root = tk.Tk()
 
@@ -223,7 +191,7 @@ def main(argv):
       current_prediction = prediction_list[index]
       if save:
         detection_count(True)
-        move_file(current_prediction.path, current_prediction.names, single)
+        move_file(current_prediction.path, current_prediction.names, single, output_directory, selected_model)
       else:
         detection_count(False)
       #attempting to treat out of index on last prediction
