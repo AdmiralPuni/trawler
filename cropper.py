@@ -72,7 +72,7 @@ def crop(input_folder, output_folder):
       threading.Thread.__init__(self)
       self.path_collection_number = path_collection_number
     def run(self):
-      for files in tqdm(path_list[self.path_collection_number]):
+      for files in tqdm(path_list[self.path_collection_number], leave=False):
         run_detector(detector, files.input, files.output)
 
   print('Cropping faces')
@@ -80,6 +80,13 @@ def crop(input_folder, output_folder):
   myThread(1).start()
   myThread(2).start()
   myThread(3).start()
+
+  #join myThreads 0-3 in a loop
+  for thread in threading.enumerate():
+    if thread.name != "MainThread":
+      thread.join()
+      
+
 
 def main():
   input_folder = 'output/video/cg1'

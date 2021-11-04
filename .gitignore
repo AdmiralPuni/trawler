@@ -4,4 +4,6 @@ output/flip/*
 output/taio/*
 output/video/*
 output/modelBuilder/*
+output/cave/*
+output/caveModel/*
 btb/*
