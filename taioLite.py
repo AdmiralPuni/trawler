@@ -135,7 +135,7 @@ def run_auto(input_directory, output_directory, selected_model, override_charact
   
   if override_character != None:
     character_names = override_character
-    model = compile_saved_model(len(character_names), selected_model + '.hdf5')
+    model = compile_saved_model(len(override_character), selected_model + '.hdf5')
   else:
     character_names, model = load_model(selected_model)
 
