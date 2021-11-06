@@ -37,7 +37,7 @@ def files_in_folder(video_folder, taio_model_name, image_per_second=12):
 
 def do_everything(video_folder, taio_model_name, character_list, image_per_second=12):
   print('Downloading references')
-  #bt.download_thumbnails(character_list, 'https://gelbooru.com/index.php?page=post&s=list&tags=sort%3ascore%3adesc+rating%3asafe+solo+1girl+', 'output/btb/yuyushiki/')
+  bt.download_thumbnails(character_list, 'https://gelbooru.com/index.php?page=post&s=list&tags=sort%3ascore%3adesc+rating%3asafe+solo+1girl+', 'output/btb/goshiusa/')
 
   print('Cropping reference faces')
   for dir in os.listdir('output/btb/' + taio_model_name):
@@ -45,7 +45,7 @@ def do_everything(video_folder, taio_model_name, character_list, image_per_secon
       cropper.crop('output/btb/' + taio_model_name + '/' + dir, 'output/btb/cropped/' + taio_model_name + '/' + dir)
 
   print('Building model')
-  mb.build_model('output/cropped/btb/' + taio_model_name, taio_model_name)
+  mb.build_model('output/btb/cropped/' + taio_model_name, taio_model_name)
   print('Running in automatic mode for files in', video_folder)
   for file in os.listdir(video_folder):
     video_filename = file
@@ -63,9 +63,9 @@ def do_everything(video_folder, taio_model_name, character_list, image_per_secon
 
 def main():
   #files_in_folder('input/video/', 'myusu',30)
-  character_list = ['kafuu_chino','hoto_cocoa','kirima_sharo','tedeza_rize','ujimatsu_chiya','jouga_maya','natsu_megumi']
+  character_list = ['kafuu_chino','hoto_cocoa','kirima_sharo','tedeza_rize','ujimatsu_chiya']
   character_list.sort()
-  do_everything('input/video', 'gochiusa', ['kafuu_chino','hoto_cocoa','kirima_sharo','tedeza_rize','ujimatsu_chiya','jouga_maya','natsu_megumi'], 12)
+  do_everything('input/video', 'gochiusa',character_list, 12)
 
 if __name__=="__main__":
   main()
