@@ -130,10 +130,14 @@ class prediction:
     self.names = names
     self.image = image
 
-def run_auto(input_directory, output_directory, selected_model):
+def run_auto(input_directory, output_directory, selected_model, override_character = None):
   prediction_list = []
   
-  character_names, model = load_model(selected_model)
+  if override_character != None:
+    character_names = override_character
+    model = compile_saved_model(len(character_names), 'models/' + selected_model + '.hdf5')
+  else:
+    character_names, model = load_model(selected_model)
 
   for filename in tqdm(os.listdir(input_directory)):
     name_fix = []

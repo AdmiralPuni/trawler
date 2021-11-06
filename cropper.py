@@ -9,7 +9,7 @@ from PIL import Image
 module_handle = "models/mobilenet/"
 detector = hub.load(module_handle).signatures['default']
 
-def crop_face(output, image, boxes, class_names, scores, max_boxes=10, min_score=0.5):
+def crop_face(output, image, boxes, class_names, scores, max_boxes=10, min_score=0.3):
   face_count = 0
   for i in range(min(boxes.shape[0], max_boxes)):
     if scores[i] >= min_score:
