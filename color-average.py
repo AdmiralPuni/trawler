@@ -27,6 +27,7 @@ def main():
       compressed_result = 0
       for x in range(resolution[0]):
         for y in range(resolution[1]):
+          
           result[index][x][y] = abs(input_image[x][y] - model_image[index][x][y])
           compressed_result += result[index][x][y]
       result_2.append(compressed_result)

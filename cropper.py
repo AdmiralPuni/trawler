@@ -2,21 +2,14 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 import tensorflow as tf
 import tensorflow_hub as hub
-import threading
 from tqdm import tqdm
 import numpy as np
 from PIL import Image
 
-module_handle = "mobilenet/"
+module_handle = "models/mobilenet/"
 detector = hub.load(module_handle).signatures['default']
 
-
-class image_paths:
-  def __init__(self, input, output):
-    self.input = input
-    self.output = output
-
-def crop_face(output, image, boxes, class_names, scores, max_boxes=10, min_score=0.3):
+def crop_face(output, image, boxes, class_names, scores, max_boxes=10, min_score=0.5):
   face_count = 0
   for i in range(min(boxes.shape[0], max_boxes)):
     if scores[i] >= min_score:
@@ -45,14 +38,6 @@ def run_detector(detector, path, output):
   crop_face(output, img.numpy(), result["detection_boxes"], result["detection_class_entities"], result["detection_scores"])
 
 def crop(input_folder, output_folder):
-  path_list = []
-  path_list.append([])
-  path_list.append([])
-  path_list.append([])
-  path_list.append([])
-
-  path_count = 0
-
   if input_folder[-1:] != '/':
     input_folder += '/'
   if output_folder[-1:] != '/':
@@ -61,33 +46,9 @@ def crop(input_folder, output_folder):
   if not os.path.exists(output_folder):
     os.makedirs(output_folder)
 
-  for file in os.listdir(input_folder):
-    if path_count == 4:
-      path_count = 0
-    path_list[path_count].append(image_paths(input_folder + file, output_folder + file))
-    path_count +=1
-
-  class myThread (threading.Thread):
-    def __init__(self, path_collection_number):
-      threading.Thread.__init__(self)
-      self.path_collection_number = path_collection_number
-    def run(self):
-      for files in tqdm(path_list[self.path_collection_number], leave=False):
-        run_detector(detector, files.input, files.output)
-
-  print('Cropping faces')
-  myThread(0).start()
-  myThread(1).start()
-  myThread(2).start()
-  myThread(3).start()
-
-  #join myThreads 0-3 in a loop
-  for thread in threading.enumerate():
-    if thread.name != "MainThread":
-      thread.join()
+  for file in tqdm(os.listdir(input_folder)):
+    run_detector(detector, input_folder + file, output_folder + file)
       
-
-
 def main():
   input_folder = 'output/video/cg1'
   output_folder = 'output/cropper/video-A2/'

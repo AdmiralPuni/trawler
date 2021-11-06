@@ -28,7 +28,7 @@ def build_model(train_directory, model_filename):
   checkpoint = ModelCheckpoint(filepath, monitor='loss', verbose=1, save_best_only=True, mode='min')
   desired_callbacks = [checkpoint]
 
-  model.fit( train_generator, steps_per_epoch=12, epochs=8, validation_data=validation_generator, validation_steps=12, verbose=1, callbacks=desired_callbacks)
+  model.fit( train_generator, steps_per_epoch=32, epochs=4, validation_data=validation_generator, validation_steps=32, verbose=1, callbacks=desired_callbacks)
 
 def main():
   build_model('output/modelBuilder/comicgirls/', 'comic-girls')

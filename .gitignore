@@ -6,4 +6,5 @@ output/video/*
 output/modelBuilder/*
 output/cave/*
 output/caveModel/*
+output/trawler/*/*
 btb/*
