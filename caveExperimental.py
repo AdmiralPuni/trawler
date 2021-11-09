@@ -157,6 +157,26 @@ def set_global_variable(input):
   global global_input
   global_input = input
 
+class uniques(threading.Thread):
+  def __init__(self, threadID, folder):
+    threading.Thread.__init__(self)
+    self.threadID = threadID
+    self.folder = folder
+  def run(self):
+    file_list = [self.folder + file for file in os.listdir(self.folder)]
+    delete_list = []
+    print(file_list[0])
+    for index,file in enumerate(tqdm(file_list)):
+      for i in range(index, index+10):
+        if file == file_list[i] or i >= len(file_list):
+          continue
+        average = get_average(file)-get_average(file_list[i])
+        average = abs(sum(average)/len(average))
+        if average < 100:
+          delete_list.append(file)
+    for file in delete_list():
+      os.remove(file)
+
 def main():
   model_name = 'myusu3'
   input_folder = 'input/images'
@@ -166,21 +186,11 @@ def main():
 
   #run_through_files(model_name, input_folder, output_folder, True)
   #run_through_files('comicgirls', 'output/cropper/cg3', 'output/cave/comicgirls/')
-  file_list = ['output/cave/myusu-season1/hanayo/' + file for file in os.listdir('output/cave/myusu-season1/hanayo')]
-  delete_list = []
-  print(file_list[0])
-  for index,file in enumerate(tqdm(file_list)):
-    for i in range(index, index+10):
-      if file == file_list[i]:
-        continue
-      average = get_average(file)-get_average(file_list[i])
-      average = abs(sum(average)/len(average))
-      if average < 100:
-        delete_list.append(file)
-  
-  for file in delete_list:
-    os.remove(file)
-  exit()
+  folder_list = ['output/cave/myusu-season1/' + folder for folder in os.listdir('output/cave/myusu-season1/')]
+  for folder in folder_list:
+    uniques(folder).start()
+  for folder in folder_list:
+    uniques(folder).join()
 
 if __name__ == '__main__':
   main()
