@@ -5,12 +5,13 @@ from tqdm import tqdm
 import pickle
 import threading
 from shutil import move
+import numpy as np
 
 #global variable for predition_list
 prediction_list = []
 global_input = ''
 
-def get_average(path, resolution=128):
+def get_average(path, resolution=64):
   image = Image.open(path)
   image = image.resize((resolution, resolution))
   blocks = []
@@ -26,13 +27,10 @@ def get_average(path, resolution=128):
       current_block_average.append((pair(rgb[0],1) + pair(rgb[1],2)+ pair(rgb[2],3))/3)
     averages.append(round(sum(current_block_average)/len(current_block_average)))
 
-  averages_top = []
-  averages_top.append(averages[0])
-  averages_top.append(averages[4])
-  averages_top.append(averages[8])
-  averages_top.append(averages[16])
+  averages = np.array(averages)
+  averages.reshape(4, 4)
 
-  return averages_top
+  return averages
 
 def compare_averages(avg1, avg2):
   return sum(abs(avg1[i] - avg2[i]) for i in range(len(avg1)))
@@ -168,7 +166,20 @@ def main():
 
   #run_through_files(model_name, input_folder, output_folder, True)
   #run_through_files('comicgirls', 'output/cropper/cg3', 'output/cave/comicgirls/')
-  print(get_average('input/images/eli.png'))
+  file_list = ['output/cave/myusu-season1/hanayo/' + file for file in os.listdir('output/cave/myusu-season1/hanayo')]
+  delete_list = []
+  print(file_list[0])
+  for index,file in enumerate(tqdm(file_list)):
+    for i in range(index, index+10):
+      if file == file_list[i]:
+        continue
+      average = get_average(file)-get_average(file_list[i])
+      average = abs(sum(average)/len(average))
+      if average < 100:
+        delete_list.append(file)
+  
+  for file in delete_list:
+    os.remove(file)
   exit()
 
 if __name__ == '__main__':
