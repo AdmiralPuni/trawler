@@ -158,9 +158,8 @@ def set_global_variable(input):
   global_input = input
 
 class uniques(threading.Thread):
-  def __init__(self, threadID, folder):
+  def __init__(self, folder):
     threading.Thread.__init__(self)
-    self.threadID = threadID
     self.folder = folder
   def run(self):
     file_list = [self.folder + file for file in os.listdir(self.folder)]
@@ -168,14 +167,19 @@ class uniques(threading.Thread):
     print(file_list[0])
     for index,file in enumerate(tqdm(file_list)):
       for i in range(index, index+10):
-        if file == file_list[i] or i >= len(file_list):
-          continue
-        average = get_average(file)-get_average(file_list[i])
-        average = abs(sum(average)/len(average))
-        if average < 100:
-          delete_list.append(file)
-    for file in delete_list():
-      os.remove(file)
+        if not i >= len(file_list):
+          if file == file_list[i]:
+            continue
+          average = get_average(file)-get_average(file_list[i])
+          average = abs(sum(average)/len(average))
+          if average < 100:
+            delete_list.append(file)
+    delete_list = np.unique(delete_list)
+    for file in delete_list:
+      try:
+        os.remove(file)
+      except:
+        print('Failed to delete file: ' + file)
 
 def main():
   model_name = 'myusu3'
@@ -186,11 +190,15 @@ def main():
 
   #run_through_files(model_name, input_folder, output_folder, True)
   #run_through_files('comicgirls', 'output/cropper/cg3', 'output/cave/comicgirls/')
-  folder_list = ['output/cave/myusu-season1/' + folder for folder in os.listdir('output/cave/myusu-season1/')]
+  folder_list = ['output/cave/test/' + folder + '/' for folder in os.listdir('output/cave/test/')]
+  unique_thread = []
   for folder in folder_list:
-    uniques(folder).start()
-  for folder in folder_list:
-    uniques(folder).join()
+    unique_thread.append(uniques(folder))
+
+  for thread in unique_thread:
+    thread.start()
+  for thread in unique_thread:
+    thread.join()
 
 if __name__ == '__main__':
   main()
