@@ -164,8 +164,8 @@ class uniques(threading.Thread):
   def run(self):
     file_list = [self.folder + file for file in os.listdir(self.folder)]
     delete_list = []
-    print(file_list[0])
-    for index,file in enumerate(tqdm(file_list)):
+    #print(file_list[0])
+    for index,file in enumerate(tqdm(file_list, leave=False, desc=self.folder)):
       for i in range(index, index+10):
         if not i >= len(file_list):
           if file == file_list[i]:
